@@ -62,7 +62,29 @@ npm run dev
 
 ## デプロイ
 
-VPSへのデプロイ手順は [docs/deployment.md](docs/deployment.md) を参照。
+### GitHub Actions による自動デプロイ
+
+mainブランチへのpush時に自動的にDockerイメージをビルドしてGitHub Container Registry (GHCR) にプッシュします。
+
+#### 必要な設定
+
+リポジトリの Settings > Secrets and variables > Actions で以下のシークレットを追加：
+
+| Secret名 | 説明 |
+|---------|------|
+| `VITE_MAPILLARY_CLIENT_TOKEN` | Mapillary API トークン（`MLY|...` 形式） |
+
+#### デプロイ手順
+
+1. コードをpushすると自動的にビルド・プッシュ
+2. VPSにSSHして手動でデプロイ：
+
+```bash
+cd /home/ubuntu/Web/jgeo
+./deploy.sh  # 最新版をデプロイ
+```
+
+詳細なVPSセットアップ手順は [docs/deployment.md](docs/deployment.md) を参照。
 
 ## ライセンス
 

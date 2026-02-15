@@ -1,8 +1,94 @@
 # VPS デプロイ手順
 
-nginx + certbot が稼働中のVPSへのデプロイ手順。
+## デプロイ方法
 
-## 前提条件
+JGeoは2つのデプロイ方法をサポートしています。
+
+### 方法1: Docker + nginx-proxy（推奨）
+
+`global-nginx-proxy` を使った自動リバースプロキシ設定によるデプロイ。SSL証明書も自動取得されます。
+
+### 方法2: systemd + nginx（従来方式）
+
+Node.jsサーバーとnginxを直接セットアップする方式。
+
+---
+
+## 方法1: Docker + nginx-proxy デプロイ（推奨）
+
+### 前提条件
+
+- Ubuntu / Debian 系 VPS
+- Docker & Docker Compose インストール済み
+- `global-nginx-proxy` コンテナが稼働中
+- `global-proxy-network` ネットワークが作成済み
+- ドメインのDNS設定完了（例: `jgeo.opus.riumu.net`）
+
+### 1. クローン & 環境変数設定
+
+```bash
+cd /home/ubuntu/Web
+git clone https://github.com/torifo/jgeo.git
+cd jgeo
+
+# 環境変数を設定
+cp .env.example .env
+nano .env
+```
+
+`.env` の設定例:
+
+```
+VITE_MAPILLARY_CLIENT_TOKEN=MLY|xxxxxxxxxxxx
+VITE_WS_URL=wss://jgeo.opus.riumu.net/ws
+VITE_API_URL=https://jgeo.opus.riumu.net
+```
+
+> `VITE_` 変数はビルド時に埋め込まれるため、ビルド前に設定すること。
+
+### 2. Dockerイメージのビルド
+
+```bash
+docker compose build
+```
+
+### 3. コンテナの起動
+
+```bash
+docker compose up -d
+```
+
+### 4. 動作確認
+
+```bash
+docker compose ps
+docker compose logs -f jgeo
+```
+
+https://jgeo.opus.riumu.net にアクセスして動作を確認してください。
+
+### 5. 更新手順
+
+```bash
+cd /home/ubuntu/Web/jgeo
+git pull
+
+# イメージ再ビルド & 再起動
+docker compose build
+docker compose up -d
+```
+
+または、バージョン管理付きデプロイスクリプトを使用：
+
+```bash
+./deploy.sh [version]
+```
+
+---
+
+## 方法2: systemd + nginx デプロイ（従来方式）
+
+### 前提条件
 
 - Ubuntu / Debian 系 VPS
 - nginx インストール済み
@@ -10,7 +96,7 @@ nginx + certbot が稼働中のVPSへのデプロイ手順。
 - Node.js 20+ インストール済み
 - git インストール済み
 
-## 1. クローン & ビルド
+### 1. クローン & ビルド
 
 ```bash
 cd /home/ubuntu/Web
@@ -43,7 +129,7 @@ npm install
 cd ..
 ```
 
-## 2. systemd サービス
+### 2. systemd サービス
 
 `/etc/systemd/system/jgeo-server.service`:
 
@@ -74,7 +160,7 @@ sudo systemctl start jgeo-server
 sudo systemctl status jgeo-server
 ```
 
-## 3. nginx 設定
+### 3. nginx 設定
 
 `/etc/nginx/sites-available/jgeo`:
 
@@ -130,13 +216,13 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-## 4. SSL 証明書（未取得の場合）
+### 4. SSL 証明書（未取得の場合）
 
 ```bash
 sudo certbot --nginx -d jgeo.example.com
 ```
 
-## 5. 更新手順
+### 5. 更新手順
 
 ```bash
 cd /home/ubuntu/Web/jgeo
