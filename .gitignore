@@ -39,3 +39,6 @@ docker-compose*.yml
 *.sln
 *.sw?
 Thumbs.db
+
+# Claude Code
+.claude/

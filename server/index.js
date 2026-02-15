@@ -375,7 +375,7 @@ function haversineDistance(lat1, lng1, lat2, lng2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3101;
 server.listen(PORT, () => {
   console.log(`JGeo server running on port ${PORT}`);
 });

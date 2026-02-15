@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
-const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:3001';
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:3101';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3101';
 
 export function useWebSocket() {
   const wsRef = useRef(null);
