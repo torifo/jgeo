@@ -1,0 +1,14 @@
+{
+  "name": "jgeo-server",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "nanoid": "^5.0.9",
+    "ws": "^8.18.0"
+  }
+}

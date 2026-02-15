@@ -1,0 +1,4 @@
+/* Custom styles for correct marker */
+.correct-marker {
+  filter: hue-rotate(120deg);
+}
