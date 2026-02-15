@@ -13,7 +13,7 @@ nginx + certbot が稼働中のVPSへのデプロイ手順。
 ## 1. クローン & ビルド
 
 ```bash
-cd /var/www
+cd /home/ubuntu/Web
 git clone https://github.com/torifo/jgeo.git
 cd jgeo
 
@@ -54,8 +54,8 @@ After=network.target
 
 [Service]
 Type=simple
-User=www-data
-WorkingDirectory=/var/www/jgeo/server
+User=ubuntu
+WorkingDirectory=/home/ubuntu/Web/jgeo/server
 ExecStart=/usr/bin/node index.js
 Restart=on-failure
 RestartSec=5
@@ -93,7 +93,7 @@ server {
     ssl_certificate_key /etc/letsencrypt/live/jgeo.example.com/privkey.pem;
 
     # フロントエンド静的ファイル
-    root /var/www/jgeo/dist;
+    root /home/ubuntu/Web/jgeo/dist;
     index index.html;
 
     location / {
@@ -139,7 +139,7 @@ sudo certbot --nginx -d jgeo.example.com
 ## 5. 更新手順
 
 ```bash
-cd /var/www/jgeo
+cd /home/ubuntu/Web/jgeo
 git pull
 
 # フロントエンド再ビルド
