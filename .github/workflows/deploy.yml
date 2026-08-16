@@ -50,10 +50,14 @@ jobs:
           EOF
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
+          # provenance attestation はマニフェストリストへの追記になるため、
+          # まだ存在しないパッケージへの初回 push では read_package を要求されて
+          # denied になる。単一イメージの push に倒す。
+          provenance: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
