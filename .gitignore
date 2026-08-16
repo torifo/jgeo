@@ -25,7 +25,8 @@ dist-ssr
 progress/
 
 # Docker (production deployment)
-Dockerfile
+# Dockerfile は CI（.github/workflows/deploy.yml）が GHCR イメージを焼くのに必要なため
+# 追跡する。ローカル専用の compose 定義だけ引き続き無視する。
 docker-compose*.yml
 
 # Editor directories and files
