@@ -43,6 +43,8 @@ COPY --from=frontend /build/dist /var/www/jgeo
 
 # Node サーバ本体と、その本番依存。
 COPY server/ /app/server/
+# server/index.js reads ../src/data/locations.json at startup
+COPY src/data /app/src/data
 COPY --from=server-deps /app/server/node_modules /app/server/node_modules
 
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
